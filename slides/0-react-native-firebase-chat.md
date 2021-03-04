@@ -319,8 +319,8 @@ const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 
 - そもそもReactが個人的に好き(突然の主観)
   - 最近練習を兼ねてRNで個人開発しているが、TSXを書くのが楽しいしスタイルもCSS感覚なので敷居が本当に低い
-- 特にExpoのManaged Workflowの場合は環境構築時に各OSの存在をほとんど意識しなくて良いので楽
-- 実例として、FrontのFirebaseは全く同じライブラリをVueでも使っているので、Webのコードをほぼそのままコピペで持ってこれる
+- Expoのおかげで環境構築時やコードを書くときに各OSの存在をほとんど意識しなくて良い
+- Firebase JS SDKのコードをNuxt.jsとRNでほぼコピペ可能
   - 先日FirebaseのStorageにファイルを上げる時に、content-dispositionヘッダを指定することでダウンロード時にファイル名を維持する施策を実装したが、ほぼ同じコードでWeb/アプリを実装できたので便利さを実感した
 
 ---
