@@ -80,6 +80,8 @@
 
 # 図にするとこんな感じ
 
+<img src="./manalink_it.png" alt="Image from Gyazo" style={{ width: '100%' }} />
+
 ---
 
 <!-- classes: left -->
@@ -96,7 +98,7 @@
 - 先生が勉強計画を立て、日々生徒が報告する機能
 - 試験日や指導日を共有できる管理機能
 
-**→先生個人がデジタル化した指導を実践できるようにしていく**
+**→先生個人が(塾などに属さなくても)デジタル化した指導を実践できるようにしていく**
 
 ---
 
@@ -250,7 +252,7 @@ Sentry.addBreadcrumb({
 - 某ライブラリと某ライブラリを併用し、かつ特定の動作をユーザーが行うとアプリがクラッシュする事案があった
   - 画面が突然ブラックアウトして強制的に再起動になる
   - 発動条件がニッチだが、本番環境で再現するユーザーがいて修正必須となった
-- 直接的な原因が全く不明
+  - 直接的な原因が全く不明
   - クラッシュが突然ブラックアウトするためエラーログが取れない
   - ライブラリのソースを追っても、ある程度追うとネイティブのコードになり謎が深まる
 
@@ -258,9 +260,10 @@ Sentry.addBreadcrumb({
 
 ---
 
-## いつでもiOS/Androidで同じと思うなよ
+## いつでもiOS/Androidで同じと思うなよ現象
 
 - チャットで画像を送信するとき、画素数を落とさずにファイルサイズを小さくするために圧縮した
+  - 画素数を落とすと文字の多い参考書の写真のやり取りで生徒さんが困ったりする
   - expo-image-manipulatorを使った
   - ImageManipulator.manipulateAsyncで圧縮しようとすると、同じ圧縮率を指定してもAndroidから実行すると**画像が圧縮されすぎてしまった**
   - OSごとに分岐して圧縮率を調整することで解消
@@ -275,22 +278,46 @@ Sentry.addBreadcrumb({
 
 ## firestore-simple
 
+- Firestoreに対する形安全なDAOが手に入れられるライブラリ
+
 ```typescript
 const roomDao = firestoreSimple.collection<Room>({ path: 'rooms' })
-const allRooms = await roomDao.fetchAll()
+const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 ```
 
 ---
 
 # Firebaseの設計
 
+## Firestoreは書き込み処理に重点を置く
+
+- SQLと違って読み取りクエリが貧弱
+- 非正規化を許容して、読み取りの仕様に合わせて最適化したコレクションを作る
+- 例：チャット部屋一覧で最新のメッセージを見せるために、messagesコレクションのonCreateでroomsコレクションに最新のメッセージを遅れて同期させる
+- 例：全ての未読数の合計を出すために、messagesへのonWriteハンドラでユーザーごとに未読数を集計して別途保存する
+
+---
+
+# Firebaseの品質管理
+
+## FunctionsでのエラーログをSlack通知
+
+- https://zenn.dev/meijin/scraps/94d4a70eb77507
+- Functionsでキャッチされなかった例外も含めSlack等でキャッチアップしたかった
+- Cloud Functionsログ→GCP→ログルーター→PubSubトピック→Cloud Function→Slack通知
+
 ---
 
 # Firebaseの落とし穴
 
+- FirebaseというかExpoの落とし穴だが、ExpoへのPush通知は割と高頻度(週に数回)で502エラーになる
+  - 400系なら分かるが、502ならどうしようもない
+  - Expoに問い合わせたが、リトライ処理を実装してくれ、とのこと
+- メッセージのonCreateハンドラ→Notificationコレクションに書き込み→NotificationコレクションのonCreateハンドラでPush通知を飛ばし、失敗時は再度同じコレクションに書き込み、的な設計でリトライを実装した
+
 ---
 
-# この技術選定で良かったと思うこと
+# React Nativeで良かったと思うこと
 
 ---
 
@@ -301,7 +328,6 @@ const allRooms = await roomDao.fetchAll()
 - 特にExpoのManaged Workflowの場合は環境構築時に各OSの存在をほとんど意識しなくて良いので楽
 - 実例として、FrontのFirebaseは全く同じライブラリをVueでも使っているので、Webのコードをほぼそのままコピペで持ってこれる
   - 先日FirebaseのStorageにファイルを上げる時に、content-dispositionヘッダを指定することでダウンロード時にファイル名を維持する施策を実装したが、ほぼ同じコードでWeb/アプリを実装できたので便利さを実感した
-  - コードそのものを共有するのは限界があるので、相互に人材および知見を共有できる程度に思っている
 
 ---
 
@@ -320,16 +346,16 @@ const allRooms = await roomDao.fetchAll()
 
 # まとめ
 
+- React Nativeのチャット機能開発
+  - UIはreact-native-gifted-chatが便利
+  - データ読み込みはHooks関連のライブラリが便利
+  - エラー検知はSentryが便利
+- Firebaseのチャット機能開発
+  - 読み取りの都合に合わせて非正規化や冗長性を許容する
+  - Cloud FunctionsのonWrite等を使って同期
+
 ---
 
-## 言いたいことメモ
+# 告知
 
-- React Native×TSX×Hooksをベースに開発している
-- Firebaseも含めて全部TypeScriptで完結している
-- Webエンジニアでも簡単なHooksの改善程度なら積極的に参加できる
-- react-firebase-hooks, firestore-simpleおすすめ
-- 謎のクラッシュなど、ハマると結構打つ手なくなるのがしんどい
-- 画像の圧縮時にAndroidとiOSで地味に違う挙動が起こる罠ｗ
-- Expoのプッシュ通知が割と落ちるのでリトライ機構を組んだ
-- FirestoreはWriteを頑張り、Readがシンプルで済むように組むのがベター
-- 限られた開発体制でも短期間で開発でき受験シーズンに間に合った。チャット機能でミニマムどれくらい機能が必要かも分かった。スタートアップの検証サイクル的にはとても有り難い技術。
+<img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '100%' }} />
