@@ -77,7 +77,7 @@
 
 # 図にするとこんな感じ
 
-<img src="./manalink_it.png" alt="Image from Gyazo" style={{ width: '100%' }} />
+<img src="./manalink_it.png" alt="Image from Gyazo" style={{ width: '90%' }} />
 
 ---
 
@@ -348,12 +348,13 @@ const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 - Firebaseのチャット機能開発
   - 読み取りの都合に合わせて非正規化や冗長性を許容する
   - Cloud FunctionsのonWrite等を使って同期
+- 開発体制を柔軟に決められる技術スタックなので大変助かっている
 
 ---
 
 # 告知
 
-<img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '100%' }} />
+<img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '90%' }} />
 
 ---
 
