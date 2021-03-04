@@ -77,7 +77,7 @@
 
 # 図にするとこんな感じ
 
-<img src="./manalink_it.png" alt="Image from Gyazo" style={{ width: '90%' }} />
+<img src="./manalink_it.png" alt="Image from Gyazo" style={{ width: '85%' }} />
 
 ---
 
@@ -354,7 +354,7 @@ const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 
 # 告知
 
-<img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '90%' }} />
+<img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '85%' }} />
 
 ---
 
