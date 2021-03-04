@@ -306,8 +306,7 @@ const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 
 - FirebaseというかExpoの落とし穴だが、ExpoへのPush通知は割と高頻度(週に数回)で502エラーになる
   - 400系なら分かるが、502ならどうしようもない
-  - Expoに問い合わせたが、リトライ処理を実装してくれ、とのこと
-- メッセージのonCreateハンドラ→Notificationコレクションに書き込み→NotificationコレクションのonCreateハンドラでPush通知を飛ばし、失敗時は再度同じコレクションに書き込み、的な設計でリトライを実装した
+  - Expoに問い合わせたが、リトライ処理を実装してくださいとのことだったので、自前で実装しました
 
 ---
 
