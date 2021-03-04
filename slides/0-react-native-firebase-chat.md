@@ -18,13 +18,11 @@
 
 - 自己紹介
 - 開発しているサービス
-- アプリで開発している機能
-- 開発体制
 - React Nativeの利用ライブラリ
 - React Nativeの品質管理
 - React Nativeの落とし穴
 - Firebaseの利用ライブラリ
-- Firebaseの設計
+- Firebaseの品質管理
 - Firebaseの落とし穴
 - この技術選定で良かったと思うこと
 - まとめ
@@ -45,8 +43,9 @@
 
 - ハンドルネーム”名人”
 - 株式会社NoSchool CTO
-- オンライン家庭教師を広める教育サービスを開発しています(https://manalink.jp)
+- オンライン家庭教師を広める教育サービス”マナリンク”を開発しています(https://manalink.jp)
 - 好きな言語はTypeScript
+- 好きなIDEはPHPStorm
 - 趣味
   - 将棋(指すのも観戦するのも好き)
   - ゲーム(最近はゼルダ無双)
@@ -68,10 +67,8 @@
 
 - マナリンク
 - 中高生向けのオンライン家庭教師サービス
-- 「優秀な先生が世界中どこに居ても教育の仕事ができるようにする」が目標
-- 先生を一人ひとり審査していて、カナダ在住の先生とか、中高生に株を教える個性的な先生など在籍している
-- Web上で先生を探して指導依頼ができる
-- 指導開始後はアプリを使ってご家庭↔先生でやり取りができる
+- Web上で先生を探して指導依頼
+- 指導開始後はアプリを使ってご家庭↔先生でやり取り
 
 <!-- block-end -->
 <!-- block-end -->
@@ -90,9 +87,9 @@
 
 ## いま
 - 先生、生徒、保護者が利用できる
-- チャット(文章、各種ファイル)で連絡できる
+- チャット(文章、画像、PDF、.docxなど)で連絡できる
   - iOS / Android対応
-  - Web↔アプリ間でもチャットができる
+  - Web(Nuxt.js)↔アプリ間でもチャットができる
 
 ## これから
 - 先生が勉強計画を立て、日々生徒が報告する機能
@@ -263,9 +260,7 @@ Sentry.addBreadcrumb({
 ## いつでもiOS/Androidで同じと思うなよ現象
 
 - チャットで画像を送信するとき、画素数を落とさずにファイルサイズを小さくするために圧縮した
-  - 画素数を落とすと文字の多い参考書の写真のやり取りで生徒さんが困ったりする
-  - expo-image-manipulatorを使った
-  - ImageManipulator.manipulateAsyncで圧縮しようとすると、同じ圧縮率を指定してもAndroidから実行すると**画像が圧縮されすぎてしまった**
+  - expo-image-manipulatorのImageManipulator.manipulateAsyncで圧縮しようとすると、同じ圧縮率を指定してもAndroidから実行すると**画像が圧縮されすぎてしまった**
   - OSごとに分岐して圧縮率を調整することで解消
   - ソースレビューの段階では何ら問題なく見えるので恐ろしい
 - 他にも通知周りなど、細かいところで結局OSごとに分岐する箇所があるので、両OSでの実機確認は必須
@@ -359,3 +354,14 @@ const allRooms = await roomDao.fetchAll() // allRooms: Room[]
 # 告知
 
 <img src="./announce_recruit.png" alt="Image from Gyazo" style={{ width: '100%' }} />
+
+---
+
+<!-- classes: title -->
+
+# ご清聴ありがとうございました
+
+<!-- block-start: grid -->
+<!-- account: twitter, meijin_garden -->
+<!-- block-end -->
+<span style={{ marginLeft: 12, fontWeight: 'bold', color: '#8888cc' }}>Twitter: @Meijin_garden</span>
